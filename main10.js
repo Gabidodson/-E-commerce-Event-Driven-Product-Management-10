@@ -4,9 +4,12 @@ document.addEventListener('DOMContentLoaded', function(){
     const purchaseButton = document.querySelector('.purchase-button');
     const stockStatus = document.createElement('p');
     stockStatus.className = 'stock-status';
+const productList = document.querySelector('.product-list');
+const addProductForm = document.getElementById('add-product-form');
 
-    sizeSelect.parentNode.insertBefore(stockStatus, sizeSelect.nextSibling);
- 
+    if(sizeSelect && sizeSelect.parentNode){
+        sizeSelect.parentNode.insertBefore(stockStatus,sizeSelect.nextSibling);
+    }
     //stock data for dog collars
     const stockData ={
         small:15,
@@ -19,18 +22,19 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
     function updatePriceAndAvailability(){
+        if(!sizeSelect || !priceShown || !purchaseButton || !stockStatus) return;
         const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
-        const size = selectedOption.value;
-        const price = selectedOption.getAttribute('data-price');
+        const size = selectedOption.value.toLowerCase();
+        const priceValue = selectedOption.getAttribute('data-price');
         const stockQuantity = stockData[size];
         
-        priceShown.textContent = `${price}`;
+        priceShown.textContent = `$${priceValue}`;
 
         if (stockQuantity > 0) {
             purchaseButton.disabled = false;
             purchaseButton.textContent = 'Add to Cart';
             stockStatus.textContent = `In Stock: ${stockQuantity} available`;
-            stockStatus.style.color = 'Pink';
+            stockStatus.style.color = 'pink';
         }
          else { 
             purchaseButton.disabled = true;
@@ -39,17 +43,17 @@ document.addEventListener('DOMContentLoaded', function(){
             stockStatus.style.color = 'blue';
         }
     }
-    sizeSelect.addEventListener('change', updatePriceAndAvailability);
-    updatePriceAndAvailability();
+    
 });
 
 //create checkout event
 function completePurchase() {
+    if(!sizeSelect)return;
     const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
     const size = selectedOption.value;
     const stockQuantity = stockData[size];
     if (stockQuantity > 0) {
-        alert(`Thank you for shopping with us! Your ${size} Dog collar is working to be shipped.`);
+        alert(`Thank you for shopping with PetSupplies! Your ${size} Dog collar is working to be shipped.`);
         stockData[size]--;
         updatePriceAndAvailability();
     }else{
@@ -57,9 +61,14 @@ function completePurchase() {
     }
     
 }
+if (sizeSelect){
+    sizeSelect.addEventListener('change', updatePriceAndAvailability);
+}
+updatePriceAndAvailability();
+
 sizeSelect.addEventListener('change', updatePriceAndAvailability);
-purchaseButton.addEventListener('click', handlePurchase);
-    updatePriceAndAvailability();
+purchaseButton.addEventListener('click', completePurchase);
+    
 
 //Event Delegation for Dynamic Product List 
 function createProductElement(productData) {
@@ -82,24 +91,24 @@ function createProductElement(productData) {
 return productElement;
 }
 function handleProductInteraction(event) {
-    const product = event.petSupplies.closest('.product');
+    const product = event.target.closest('.product');
     if (!product) return;
 
     const sizeSelect = product.querySelector('.size-select');
     const priceShown = product.querySelector('.product-price');
     const purchaseButton = product.querySelector('.purchase-button');
-    const stockStatus = product.querySelector('.stock-status';
+    const stockStatus = product.querySelector('.stock-status');
 
-        if (event.petSupplies.classList.contains('size-select')) {
+        if (event.target.classList.contains('size-select')) {
             updatePriceAndAvailability(sizeSelect, priceShown, purchaseButton, stockStatus);
-        } else if (event.petSupplies.classList.contains('purchase-button')) {
-            handlePurchase(sizeSelect, purchaseButton, stockStatus);
+        } else if (event.target.classList.contains('purchase-button')) {
+            completePurchase(sizeSelect, purchaseButton, stockStatus);
         }
 }
-function addNewMerchendise(event) {
+function addNewMerchandise(event) {
     event.preventDefault();
-    const formData = new FormData(event.petSupplies);
-    const newMerchendise = {
+    const formData = new FormData(event.target);
+    const newMerchandise = {
         id: Date.now(),
         name: formData.get('name'),
         price: formData.get('price'),
@@ -111,11 +120,11 @@ function addNewMerchendise(event) {
             'xx-large': parseInt (formData.get('xx-large-stock')),
         }
     };
-    const productElement = createProductElement (newProduct);
+    const productElement = createProductElement (newMerchandise);
     productList.appendChild(productElement);
-    event.petSupplies.reset();
+    event.target.reset();
 }
 
 productList.addEventListener('click', handleProductInteraction);
 productList.addEventListener('change', handleProductInteraction);
-addProductForm.addEventListener('submit', addNewMerchendise);
+addProductForm.addEventListener('submit', addNewMerchandise);
