@@ -4,9 +4,24 @@
     <meta charset ="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scaled=1.0">
     <title>Product Page</title>
-    </html><head><body>
+    </html>
+    <head>
+    <body>
         <main>
-            <section class="product">
+            <div class="product-list">
+                <!--products available-->
+            </div>  
+            <form id="add product form">
+                <h3>Add Product</h3>
+                <input type="text" name="name"placeholder="Product Name" required>
+                <input type="number"name="price"placeholder="price"step="0.01"required>
+                <input type="number"name="small-stock"placeholder="Small Stock"required>
+                <input type="number"name="medium-stock"placeholder="Medium Stock"required>
+                <input type="number"name="large-stock"placeholder="Large Stock"required>
+                <input type="number"name="X-large"placeholder="X-Large Stock"required>
+                <input type="number"name="XX-large"placeholder="XX-Large Stock" required>
+                <button type="submit"> Add Product</button>
+            </form> 
 <h2 class="product-name">Dog Collars</h2>
 <p class="product-price">$35.99</p>
 <div class="product-options">
@@ -18,7 +33,6 @@
         <option value="X-Large" data-price="$48.99">X-Large:In Stock</X-Large> </option>
         <option value="XX-Large" data-price="$52.99">XX-Large:In Stock </option>
     </select>
-</div>
 <button class="Purchase-button"class="purchase button"> Add to Cart</button>
             </section>
         </main>
