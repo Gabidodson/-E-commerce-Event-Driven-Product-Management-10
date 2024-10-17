@@ -44,5 +44,21 @@ document.addEventListener('DOMContentLoaded', function(){
     updatePriceAndAvailability();
 });
 
-
+//create checkout event
+function completePurchase() {
+    const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
+    const size = selectedOption.value;
+    const stockQuantity = stockData[size];
+    if (stockQuantity > 0) {
+        alert(`Thank you for shopping with us! Your ${size} Dog collar is working to be shipped.`);
+        stockData[size]--;
+        updatePriceAndAvailability();
+    }else{
+        alert('Sorry, Our paws are working to get this back in stock');
+    }
+    
+}
+sizeSelect.addEventListener('change', updatePriceAndAvailability);
+purchaseButton.addEventListener('click', handlePurchase);
+    updatePriceAndAvailability();
 
