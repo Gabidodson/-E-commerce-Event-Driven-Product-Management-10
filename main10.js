@@ -44,7 +44,7 @@ const addProductForm = document.getElementById('add-product-form');
         }
     }
     
-});
+
 
 //create checkout event
 function completePurchase() {
@@ -64,11 +64,12 @@ function completePurchase() {
 if (sizeSelect){
     sizeSelect.addEventListener('change', updatePriceAndAvailability);
 }
-updatePriceAndAvailability();
 
 sizeSelect.addEventListener('change', updatePriceAndAvailability);
 purchaseButton.addEventListener('click', completePurchase);
     
+updatePriceAndAvailability();
+});
 
 //Event Delegation for Dynamic Product List 
 function createProductElement(productData) {
